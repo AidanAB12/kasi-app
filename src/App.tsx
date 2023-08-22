@@ -3,7 +3,6 @@ import "./App.css";
 import { Buffer } from "buffer";
 import { saveAs } from "file-saver";
 import { FirebaseError } from "firebase/app";
-import * as fs from "fs";
 interface Box {
   x_center: number;
   y_center: number;
@@ -36,7 +35,6 @@ function App() {
   const [videoDevices, setVideoDevices] = useState<InputDeviceInfo[]>([]);
   const selectRef = useRef<HTMLSelectElement>(null!);
   const [filebase64, setFileBase64] = useState<string>("");
-  const fs = require("fs");
   const [fileRef, setFileRef] = useState<File | null>(null);
   const [base64DataUrl, setBase64DataUrl] = useState<string | null>(null); // Declare base64DataUrl at a higher scope
 
@@ -79,9 +77,11 @@ function App() {
 
   const upload = async () => {
     // File object is already a Blob
+    let final = base64DataUrl?.replace("data:image/jpeg;base64,", "");
+    final = final?.replace("data:image/png;base64,", "");
+    const body = JSON.stringify({ image_data: [final] });
 
     const b64 = base64DataUrl;
-    const body = JSON.stringify({ image_data: [base64DataUrl] });
     const url = "http://10.27.3.67/predict";
     const response = await fetch(url, {
       method: "post",
