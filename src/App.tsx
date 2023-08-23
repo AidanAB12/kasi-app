@@ -96,8 +96,8 @@ function App() {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
           deviceId: device.deviceId,
-          width: { ideal: 300 },
-          height: { ideal: 200 },
+          width: { ideal: 640 },
+          height: { ideal: 400 },
         },
       });
       streamRef.current = stream;
@@ -210,14 +210,14 @@ function App() {
   };
 
   function drawImageOnCanvas(imageSrc: string, canvas: HTMLCanvasElement) {
+    const ctx = canvas.getContext("2d");
+
     canvas.style.width = "500px";
     canvas.style.height = "300px";
     canvas.style.border = "solid";
     canvas.style.position = "inline";
     canvas.style.marginLeft = "300px";
-    canvas.style.padding = "0px";
-
-    const ctx = canvas.getContext("2d");
+    canvas.style.marginTop = "5px";
 
     if (ctx) {
       const img = new Image();
@@ -225,6 +225,7 @@ function App() {
       img.onload = () => {
         console.log("Drawing image");
         ctx.drawImage(img, 0, 0);
+        console.log(ctx.drawImage);
 
         lastPrediction.predictions.forEach((prediction) => {
           prediction.boxes.forEach((box) => {
